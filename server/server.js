@@ -2,29 +2,28 @@
  * ************************************
  *
  * @module  server
- * @author Mark, Joe
+ * @author Mark, Joe, Elise, Lara
  * @date 11/18
  * @description Main entry point for backend. uses express to connect to routers which use controller middleware.
  *
  * ************************************
  */
-// const db = require('./models/model')
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const WebSocket = require('ws');
+
 
 const socketServer = new WebSocket.Server({port:3030});
 
 // Register event for client connection
 socketServer.on('connection', function connection(ws) {
 
-  // broadcast on web socket when receving a Redis PUB/SUB Event
-
   //websocket receives message from front end
   //accept an array of id's (run foreach)
   ws.on('message',(message)=>{
-
+    
     message = JSON.parse(message)
 
     //if message is array, this is a set of clients to add, 
@@ -36,8 +35,7 @@ socketServer.on('connection', function connection(ws) {
           
           let sendId = el.clientId;
           socketServer.clients.forEach(client=>{
-            // this.options.name = "yo"
-
+         
             if(client.readyState === WebSocket.OPEN){
               client.send(JSON.stringify({message, channel, clientId: this.clientId}));
             }
@@ -48,7 +46,7 @@ socketServer.on('connection', function connection(ws) {
     //single client
     else {
       subObj[message.clientId].on('message', function(channel, message){
-        
+       
         let sendId = message.clientId;
         socketServer.clients.forEach(client=>{
           
@@ -56,16 +54,12 @@ socketServer.on('connection', function connection(ws) {
             client.send(JSON.stringify({message, channel, clientId:this.clientId}));
           }
         })
-        
-        })
-
+      })
     }
-    
   });
 
   ws.on("close", function(){
     for(let key in subObj){
-
       subObj[key].quit()
       delete subObj[key]
     }

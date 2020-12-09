@@ -1,14 +1,13 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require("webpack");
-
-const mode = process.env.NODE_ENV;
 
 module.exports = {
   entry: path.resolve(__dirname, './client/index.js'),
   mode: process.env.NODE_ENV,
   output: {
-    filename: 'bundle.js',
+    filename: 'bundle.js', //bundle serves in template html
     path: path.resolve(__dirname, './build'),
   },
   //dev
@@ -16,7 +15,7 @@ module.exports = {
     publicPath: '/build/', //matches the path for the production output
     proxy: {
       '/**': {
-        target: 'http://localhost:3000' //will this affect web socket ports?
+        target: 'http://localhost:3000' 
       }
     }
   },
@@ -40,12 +39,10 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif)$/i,
         exclude: /gifs/,
-        // loader: "file-loader?name=/static/RPS_View_logo.png",
         use: [
           {
           loader: 'url-loader',
           options: {
-            // outputPath: 'static',
             limit: false,
           }
          }]
@@ -74,9 +71,8 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(mode),
+    new HtmlWebpackPlugin({
+      template: './index.html'
     })
-    
   ]
 };

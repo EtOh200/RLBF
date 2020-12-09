@@ -56,7 +56,7 @@ export const fetchAddClones = (stateObj) => (dispatch) => {
     stateObj.arr.push({clientId: next, type});
     next++;
   }
-  fetch('/menu/addClonedClients', {
+  fetch('http://localhost:3000/menu/addClonedClients', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export const fetchAddClones = (stateObj) => (dispatch) => {
 };
 
 export const fetchSubscribeMany = (stateObj) => (dispatch) => {
-  fetch('/client/subscribeMany', {
+  fetch('http://localhost:3000/client/subscribeMany', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export const fetchSubscribeMany = (stateObj) => (dispatch) => {
 }
 
 export const fetchMessage = (stateObj) => (dispatch) => {
-  fetch("/client/publish", {
+  fetch("http://localhost:3000/client/publish", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ export const fetchMessage = (stateObj) => (dispatch) => {
 
 export const fetchSubscribe = (stateObj) => (dispatch) => {
   
-  fetch("/client/subscribe", {
+  fetch("http://localhost:3000/client/subscribe", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ export const fetchSubscribe = (stateObj) => (dispatch) => {
 
 export const fetchUnsubscribe = (stateObj) => (dispatch) => {
   
-  fetch("/client/unsubscribe", {
+  fetch("http://localhost:3000/client/unsubscribe", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -206,7 +206,7 @@ export const getDate = (stateObj) => (dispatch) => {
 //fetchConnect
 export const fetchConnect = (port) => (dispatch) => {
   //fetch
-  fetch('/menu/connect', {
+  fetch('http://localhost:3000/menu/connect', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -217,13 +217,13 @@ export const fetchConnect = (port) => (dispatch) => {
   .then(response => {
     if (response.status === 200) {
       return response.json()
-    } else dispatch(errorActions.errorHandler(`Failed to connect to ${port}`));
+    } else dispatch(errorActions.errorHandler(`Failed to connect to ${port || '6379'}`));
   }).then(data => {
     dispatch(channelActions.portConnected({port, channels:data.channels}));
 
   })
   .catch((error) => {
-    dispatch(errorActions.errorHandler(`Failed to connect to ${port}`));
+    dispatch(errorActions.errorHandler(`Failed to connect to ${port || '6379'}`));
   })
   
 }
@@ -232,7 +232,7 @@ export const fetchConnect = (port) => (dispatch) => {
 //data in form of 
 // {clientId: #, type: 'publisher' OR 'subscriber' OR '' defaults to subscriber}
 export const fetchAddClient = (data) => (dispatch) => {
-  fetch('/menu/addClient', {
+  fetch('http://localhost:3000/menu/addClient', {
     method: 'POST', 
     headers: {
       'Content-Type': 'application/json',
@@ -279,7 +279,7 @@ export const wsMessage = (data) => dispatch => {
 
 //fetchAddChannel
 export const fetchAddChannel = (channelName) => (dispatch) => {
-  fetch('/menu/addChannel', {
+  fetch('http://localhost:3000/menu/addChannel', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
