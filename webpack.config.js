@@ -1,5 +1,8 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require("webpack");
+
+const mode = process.env.NODE_ENV;
 
 module.exports = {
   entry: path.resolve(__dirname, './client/index.js'),
@@ -36,6 +39,7 @@ module.exports = {
       //image loaders
       {
         test: /\.(png|jpe?g|gif)$/i,
+        exclude: /gifs/,
         // loader: "file-loader?name=/static/RPS_View_logo.png",
         use: [
           {
@@ -70,6 +74,9 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(mode),
+    })
     
   ]
 };
